@@ -30,41 +30,41 @@ jobs:
            with:
               config: "p/javascript"
 
-   deploy-to-preprod:
-      name: PR & Auto-Merge to Pre-Prod
+   deploy-to-staging:
+      name: PR & Auto-Merge to Staging
       needs: security-scan
       runs-on: ubuntu-latest
       steps:
          - name: Checkout Code
            uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
-         - name: Create Pull Request to Pre-Prod
-           id: cpr-preprod
+         - name: Create Pull Request to Staging
+           id: cpr-staging
            uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
            with:
               token: ${{ secrets.GITHUB_TOKEN }}
               branch: auto-deploy-main
-              base: pre-prod
-              title: "🚀 Auto-Deploy: Merge main into pre-prod"
+              base: staging
+              title: "🚀 Auto-Deploy: Merge main into staging"
               body: "Automated PR after passing Gitleaks and Semgrep security scans."
               delete-branch: true
 
-         - name: Enable Auto-Merge for Pre-Prod
-           if: steps.cpr-preprod.outputs.pull-request-number != ''
+         - name: Enable Auto-Merge for Staging
+           if: steps.cpr-staging.outputs.pull-request-number != ''
            env:
               GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-           run: gh pr merge ${{ steps.cpr-preprod.outputs.pull-request-number }} --auto --merge
+           run: gh pr merge ${{ steps.cpr-staging.outputs.pull-request-number }} --auto --merge
 
    notify:
       name: Email Notification
-      needs: [security-scan, deploy-to-preprod]
+      needs: [security-scan, deploy-to-staging]
       if: always() # Runs regardless of success or failure
       runs-on: ubuntu-latest
       steps:
          - name: Determine Pipeline Status
            id: status
            run: |
-              if [ "${{ needs.security-scan.result }}" == "success" ] && [ "${{ needs.deploy-to-preprod.result }}" == "success" ]; then
+              if [ "${{ needs.security-scan.result }}" == "success" ] && [ "${{ needs.deploy-to-staging.result }}" == "success" ]; then
                 echo "pipeline_status=SUCCESS" >> $GITHUB_ENV
               else
                 echo "pipeline_status=FAILED" >> $GITHUB_ENV
@@ -88,10 +88,10 @@ jobs:
 
                  Job Breakdown:
                  - Security Scans (Secrets & SAST): ${{ needs.security-scan.result }}
-                 - PR & Auto-Merge to Pre-Prod: ${{ needs.deploy-to-preprod.result }}
+                 - PR & Auto-Merge to Staging: ${{ needs.deploy-to-staging.result }}
 
                  Prod promotion is a separate, manually-triggered workflow
-                 ("Promote Pre-Prod to Prod") — run it from the Actions tab when ready.
+                 ("Promote Staging to Prod") — run it from the Actions tab when ready.
 
                  View the full logs and details here:
                  ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
