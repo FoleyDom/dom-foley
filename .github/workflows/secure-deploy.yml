@@ -69,29 +69,3 @@ jobs:
               else
                 echo "pipeline_status=FAILED" >> $GITHUB_ENV
               fi
-
-         - name: Send Email via SMTP
-           uses: dawidd6/action-send-mail@4226df7daafa6fc901a43789c49bf7ab309066e7 # v3
-           with:
-              server_address: smtp.gmail.com
-              server_port: 465
-              secure: true
-              username: ${{ secrets.SMTP_USERNAME }}
-              password: ${{ secrets.SMTP_PASSWORD }}
-              subject: "Next.js CI/CD Pipeline ${{ env.pipeline_status }}"
-              to: dfoleydev@gmail.com, domfoley.dev@gmail.com
-              from: GitHub Actions Bot
-              body: |
-                 The GitHub Action workflow on branch 'main' has completed.
-
-                 Overall Status: ${{ env.pipeline_status }}
-
-                 Job Breakdown:
-                 - Security Scans (Secrets & SAST): ${{ needs.security-scan.result }}
-                 - PR & Auto-Merge to Staging: ${{ needs.deploy-to-staging.result }}
-
-                 Prod promotion is a separate, manually-triggered workflow
-                 ("Promote Staging to Prod") — run it from the Actions tab when ready.
-
-                 View the full logs and details here:
-                 ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
