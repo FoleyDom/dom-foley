@@ -1,0 +1,60 @@
+name: Promote Pre-Prod to Prod
+
+# GitHub's "required reviewers" environment protection needs a paid plan on
+# private repos, so the manual gate here is `workflow_dispatch` itself —
+# someone has to deliberately run this from the Actions tab. If this repo
+# ever moves to GitHub Team/Enterprise or goes public, add required reviewers
+# to the "production" environment below and this job will also wait for
+# approval there.
+on:
+   workflow_dispatch:
+
+permissions:
+   contents: write
+   pull-requests: write
+
+jobs:
+   promote-to-prod:
+      name: PR & Auto-Merge to Prod
+      runs-on: ubuntu-latest
+      environment: production
+      steps:
+         - name: Checkout Code
+           uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+         - name: Create Pull Request to Prod
+           id: cpr-prod
+           uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
+           with:
+              token: ${{ secrets.GITHUB_TOKEN }}
+              branch: pre-prod
+              base: prod
+              title: "🚀 Promote pre-prod into prod"
+              body: "Manually-triggered promotion from pre-prod into prod."
+              delete-branch: false
+
+         - name: Enable Auto-Merge for Prod
+           if: steps.cpr-prod.outputs.pull-request-number != ''
+           env:
+              GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+           run: gh pr merge ${{ steps.cpr-prod.outputs.pull-request-number }} --auto --merge
+
+         - name: Send Email via SMTP
+           if: always()
+           uses: dawidd6/action-send-mail@4226df7daafa6fc901a43789c49bf7ab309066e7 # v3
+           with:
+              server_address: smtp.gmail.com
+              server_port: 465
+              secure: true
+              username: ${{ secrets.SMTP_USERNAME }}
+              password: ${{ secrets.SMTP_PASSWORD }}
+              subject: "Next.js Prod Promotion ${{ job.status }}"
+              to: dfoleydev@gmail.com, domfoley.dev@gmail.com
+              from: GitHub Actions Bot
+              body: |
+                 Manual prod promotion triggered by ${{ github.actor }} has completed.
+
+                 Status: ${{ job.status }}
+
+                 View the full logs and details here:
+                 ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
