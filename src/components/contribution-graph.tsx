@@ -65,18 +65,24 @@ export async function ContributionGraph() {
           github.com/{site.username}
         </ArrowLink>
       </div>
-      <div
-        className="grid grid-flow-col gap-0.75 overflow-hidden"
-        style={{ gridTemplateRows: "repeat(7, 10px)", gridAutoColumns: "10px" }}
-      >
-        {cells.map((cell, i) => (
-          <span
-            key={i}
-            title={cell.date ? `${cell.count} on ${cell.date}` : undefined}
-            className="h-2.5 w-2.5 rounded-[2.5px]"
-            style={{ background: cell.level < 0 ? "transparent" : cellColor(cell.level) }}
-          />
-        ))}
+      {/* dir="rtl" makes the scrollable area anchor to its end (the most
+          recent weeks) by default without JS; dir="ltr" on the inner grid
+          keeps the cells themselves in normal chronological order. */}
+      <div className="overflow-x-auto" dir="rtl">
+        <div
+          dir="ltr"
+          className="grid w-max grid-flow-col gap-0.75"
+          style={{ gridTemplateRows: "repeat(7, 10px)", gridAutoColumns: "10px" }}
+        >
+          {cells.map((cell, i) => (
+            <span
+              key={i}
+              title={cell.date ? `${cell.count} on ${cell.date}` : undefined}
+              className="h-2.5 w-2.5 rounded-[2.5px]"
+              style={{ background: cell.level < 0 ? "transparent" : cellColor(cell.level) }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

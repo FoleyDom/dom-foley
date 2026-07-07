@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <div className="mx-auto max-w-266 px-8">
       {/* ── hero ── */}
-      <section className="grid items-center gap-8 py-14 md:grid-cols-[1fr_280px] md:gap-14 md:pt-24 md:pb-18">
+      <section className="grid grid-cols-1 items-center gap-8 py-14 md:grid-cols-[1fr_280px] md:gap-14 md:pt-24 md:pb-18">
         <div className="flex max-w-180 flex-col gap-5.5">
           <div className="flex items-center gap-2 self-start rounded-full border border-border bg-card px-3 py-1.5 text-[13px] text-muted-foreground">
             <span
@@ -30,8 +30,8 @@ export default function Home() {
           </h1>
 
           <p className="m-0 max-w-130 text-[18px] leading-[1.6] text-pretty text-muted-foreground">
-            I&apos;m Dom — a full-stack engineer who ships code and understands what it runs on. I build web products end to end: React/Next.js frontends, typed APIs, and
-            the CI/CD + infrastructure that deploys them — 5 years in, most of it on a high-traffic e-commerce platform, plus independent open-source work on the side.
+            I&apos;m Dom — a full-stack engineer who ships code and understands what it runs on. I build web products end to end: React/Next.js frontends, typed PHP/Laravel and Node.js APIs, and
+            the CI/CD-driven Docker + AWS infrastructure that deploys them — 5 years in, most of it on a high-traffic e-commerce platform, plus independent open-source work on the side.
           </p>
 
           <div className="mt-1.5 flex flex-wrap items-center gap-3">
@@ -162,7 +162,7 @@ export default function Home() {
 
       {/* ── contact ── */}
       <section id="contact" className="scroll-mt-20 pt-18 pb-22">
-        <div className="grid gap-10 rounded-2xl border border-border bg-card p-10 shadow-[--shadow] md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-10 rounded-2xl border border-border bg-card p-10 shadow-[--shadow] md:grid-cols-2">
           <div className="flex flex-col gap-3.5">
             <h2 className="m-0 text-[32px] font-semibold tracking-[-0.02em]">let&apos;s talk.</h2>
             <p className="m-0 text-[15.5px] leading-[1.6] text-pretty text-muted-foreground">

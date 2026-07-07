@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-210 px-8">
-      <section className="grid items-start gap-11 pt-18 md:grid-cols-[1fr_220px]">
+      <section className="grid grid-cols-1 items-start gap-11 pt-18 md:grid-cols-[1fr_220px]">
         <div className="flex flex-col gap-4">
           <h1 className="m-0 text-[44px] font-semibold tracking-[-0.03em]">about</h1>
           {bio.map((para, i) => (
@@ -51,7 +51,7 @@ export default function AboutPage() {
           {jobs.map((j) => (
             <div
               key={`${j.co}-${j.years}`}
-              className="grid gap-2 border-t border-border py-5 sm:grid-cols-[150px_1fr] sm:gap-6"
+              className="grid grid-cols-1 gap-2 border-t border-border py-5 sm:grid-cols-[150px_1fr] sm:gap-6"
             >
               <span className="font-mono text-[12.5px] text-faint sm:pt-0.75">{j.years}</span>
               <div className="flex flex-col gap-1.5">
@@ -74,7 +74,7 @@ export default function AboutPage() {
           {skillGroups.map((g) => (
             <div
               key={g.label}
-              className="grid gap-2 border-t border-border py-4 sm:grid-cols-[150px_1fr] sm:gap-6"
+              className="grid grid-cols-1 gap-2 border-t border-border py-4 sm:grid-cols-[150px_1fr] sm:gap-6"
             >
               <span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-faint sm:pt-1">
                 {g.label}

@@ -12,7 +12,7 @@ export const jobs: Job[] = [
     years: "2023 — 2026",
     role: "Full-stack Web Developer",
     co: "Best Cigar Prices",
-    desc: "Built features and maintained a high-traffic e-commerce platform, as well as the associated backend services. Designed, built, and improved legacy internal backend systems. Worked across the stack: PHP, CodeIgniter, JavaScript, Linux VM, PostgreSQL, and AWS.",
+    desc: "Built and maintained a high-traffic e-commerce platform and its backend services, plus legacy internal systems — full-stack across PHP/CodeIgniter (with jQuery-driven AJAX views), PostgreSQL, and AWS-hosted Linux infrastructure.",
   }
 ];
 
