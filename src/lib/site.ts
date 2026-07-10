@@ -7,7 +7,7 @@ export const site = {
   url: "https://domfoley.com",
   location: "Scranton, PA · remote-friendly",
   username: "FoleyDom",
-  resumeUrl: "/resume/Dominique Foley Resume.pdf",
+  resumeUrl: "/resume/Dom-Foley-Resume.pdf",
   socials: {
     github: "https://github.com/FoleyDom",
     linkedin: "https://www.linkedin.com/in/domfoley",
