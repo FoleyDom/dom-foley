@@ -66,7 +66,7 @@
   --card-foreground: #18141f;
   --foreground: #18141f;
   --muted-foreground: #6f6a7c;
-  --faint: #9b96a8;
+  --faint: #756f85; /* darkened from #9b96a8 — original was 2.75:1 on --background, fails WCAG AA (4.5:1) at the small sizes it's used at */
   --line: rgba(24, 16, 48, 0.1);
   --border: var(--line);
   --input: var(--line);
@@ -110,7 +110,7 @@
   --card-foreground: #eceaf2;
   --foreground: #eceaf2;
   --muted-foreground: #a09aae;
-  --faint: #6e6880;
+  --faint: #847e96; /* lightened from #6e6880 — original was 3.62:1 on --background; --card (#16141d) is lighter than --background and is the binding surface (text-faint renders on card backgrounds too), where the prior value only cleared 4.4:1 */
   --line: rgba(235, 230, 255, 0.1);
   --border: var(--line);
   --input: var(--line);

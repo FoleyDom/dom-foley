@@ -18,22 +18,23 @@ export function HeroTile() {
           alt="dom foley — ~/df logo"
           loading="eager"
           fill
-          unoptimized
           sizes="(max-width: 768px) 176px, 280px"
           className="rounded-[24px]"
         />
 
-        {/* rotating dashed ring framing the logo */}
+        {/* rotating dashed ring framing the logo — border-foreground so it
+            stays visible in both themes (the old white/30 vanished against
+            the light-mode page background it extends past) */}
         <span className="pointer-events-none absolute inset-0 grid place-items-center">
-          <span className="h-[116%] w-[116%] animate-[spin_60s_linear_infinite] rounded-full border border-dashed border-white/30" />
+          <span className="h-[116%] w-[116%] animate-[spin_60s_linear_infinite] rounded-full border border-dashed border-foreground/25" />
         </span>
 
         {/* orbiting dot riding the outer ring */}
         <span className="pointer-events-none absolute inset-0 grid place-items-center">
           <span className="relative h-[116%] w-[116%] animate-[spin_24s_linear_infinite]">
             <span
-              className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white"
-              style={{ boxShadow: "0 0 10px 2px rgba(255, 255, 255, 0.6)" }}
+              className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground"
+              style={{ boxShadow: "0 0 10px 2px color-mix(in srgb, var(--foreground) 60%, transparent)" }}
             />
           </span>
         </span>

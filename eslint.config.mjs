@@ -12,9 +12,6 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // Vendored design-tool prototype + its generated runtime — reference only.
-    "design/**",
-    "design_handoff/**",
   ]),
 ]);
 

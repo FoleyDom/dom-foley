@@ -5,6 +5,7 @@ import { ContributionGraph } from "@/components/contribution-graph";
 import { ContactForm } from "@/components/contact-form";
 import { ComingSoonInline } from "@/components/coming-soon";
 import { ArrowLink } from "@/components/arrow-link";
+import { EmailLink } from "@/components/email-link";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 // import { testimonials } from "@/lib/about";
 import { site } from "@/lib/site";
@@ -13,7 +14,7 @@ export default function Home() {
   return (
     <div className="mx-auto max-w-266 px-8">
       {/* ── hero ── */}
-      <section className="grid grid-cols-1 items-center gap-8 py-14 md:grid-cols-[1fr_280px] md:gap-14 md:pt-24 md:pb-18">
+      <section className="grid grid-cols-1 items-stretch gap-8 py-14 md:grid-cols-[1fr_440px] md:gap-14 md:pt-14 md:pb-13">
         <div className="flex max-w-180 flex-col gap-5.5">
           <div className="flex items-center gap-2 self-start rounded-full border border-border bg-card px-3 py-1.5 text-[13px] text-muted-foreground">
             <span
@@ -48,7 +49,7 @@ export default function Home() {
             >
               about me
             </Link>
-            <span className="ml-1.5 font-mono text-[12.5px] text-faint">{site.email}</span>
+            <EmailLink className="ml-1.5 text-[12.5px]" />
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -78,7 +79,7 @@ export default function Home() {
               <TooltipTrigger asChild>
                 <a
                   href={encodeURI(site.resumeUrl)}
-                  download="Dominique Foley Resume.pdf"
+                  download="Dom-Foley-Resume.pdf"
                   className="rounded-[7px] border border-border bg-card px-2.75 py-1.25 font-mono text-[12px] text-muted-foreground no-underline transition-[color,border-color,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-accent-line hover:text-accent-ink"
                 >
                   résumé ↓
@@ -89,14 +90,33 @@ export default function Home() {
           </div>
         </div>
 
-        <HeroTile />
+        {/* Mobile: marquee, then the graph, standing in the logo's slot.
+            Desktop: logo floats free (no card), top offset fixed at pill
+            height + gap above the heading (so it lines up with the
+            headline) plus a small extra nudge down; the graph keeps its
+            own full card styling and is pinned to the column's bottom
+            edge, which is the same as the social-icons row's bottom edge
+            since that row is the left column's last child. */}
+        <div className="flex flex-col gap-8 md:relative md:block">
+          <div className="md:hidden">
+            <StackMarquee />
+          </div>
+          <ContributionGraph className="md:hidden" />
+
+          <div className="hidden md:absolute md:inset-x-0 md:top-[75.5px] md:flex md:justify-center">
+            <HeroTile />
+          </div>
+          <ContributionGraph className="hidden md:absolute md:inset-x-0 md:bottom-0 md:block" />
+        </div>
       </section>
 
       {/* ── core stack strip ── */}
-      <StackMarquee />
+      <div className="hidden md:block">
+        <StackMarquee />
+      </div>
 
       {/* ── featured work ── */}
-      <section className="pt-18">
+      <section className="pt-12">
         <div className="mb-7 flex items-baseline gap-4">
           <h2 className="m-0 text-[28px] font-semibold tracking-[-0.02em]">featured work</h2>
           <ArrowLink href="/work" className="ml-auto">
@@ -110,11 +130,6 @@ export default function Home() {
           href="/work"
           cta="peek at the queue"
         />
-      </section>
-
-      {/* ── github graph ── */}
-      <section className="pt-18">
-        <ContributionGraph />
       </section>
 
       {/* ── recent writing ── */}
@@ -170,7 +185,9 @@ export default function Home() {
               pairing session, or just chat architecture. Usually reply within a day.
             </p>
             <div className="mt-auto flex flex-col gap-1.5 font-mono text-[13px] text-muted-foreground">
-              <span>→ {site.email}</span>
+              <span className="flex items-center gap-1">
+                → <EmailLink className="text-[13px] text-muted-foreground" />
+              </span>
               <span>→ {site.location}</span>
             </div>
           </div>
