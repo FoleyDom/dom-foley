@@ -11,8 +11,7 @@ function isEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-// Rate limiting is optional — without UPSTASH_REDIS_REST_URL/TOKEN configured
-// (e.g. in local dev) the form just skips the check rather than failing.
+//? Rate limiting with Upstash Redis. If the env vars aren't set, this will be a no-op and all submissions will be accepted.
 const redis =
   process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
     ? new Redis({
@@ -49,20 +48,20 @@ export async function submitContact(
   const message = String(formData.get("message") ?? "").trim();
   const honeypot = String(formData.get("hp_confirm") ?? "").trim();
 
-  // Bots fill the hidden field — pretend success and drop it.
+  //? Bots fill the hidden field — pretend success and drop it.
   if (honeypot) return { ok: true };
 
-  // Validate before spending a rate-limit slot, so garbage submissions from a
-  // shared IP (office, school, VPN egress) can't lock out real visitors on it.
+  //? Validate before spending a rate-limit slot, so garbage submissions from a
+  //? shared IP (office, school, VPN egress) can't lock out real visitors on it.
   if (!name || !email || !message) return { ok: false, error: "Please fill in every field." };
   if (!isEmail(email)) return { ok: false, error: "That email doesn't look right." };
   if (message.length > 5000) return { ok: false, error: "That message is a little too long." };
 
   if (ratelimit) {
     const hdrs = await headers();
-    // Trustworthy as-is on Vercel, which overwrites client-supplied
-    // X-Forwarded-For rather than forwarding it — see Vercel's request-header
-    // docs. Re-check this ordering if this ever moves off Vercel.
+    //? Trustworthy as-is on Vercel, which overwrites client-supplied
+    //? X-Forwarded-For rather than forwarding it — see Vercel's request-header
+    //? docs. Re-check this ordering if this ever moves off Vercel.
     const ip =
       hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ||
       hdrs.get("cf-connecting-ip") ||
@@ -73,7 +72,7 @@ export async function submitContact(
         return { ok: false, error: "Too many messages sent recently — try again in a bit." };
       }
     } catch (err) {
-      // Fail open — an Upstash hiccup shouldn't block a real submission.
+      //? Fail open — an Upstash hiccup shouldn't block a real submission.
       console.error("Rate limit check failed", err);
     }
   }
@@ -86,11 +85,11 @@ export async function submitContact(
     };
   }
 
-  const to =
-    process.env.CONTACT_TO?.split(",")
-      .map((s) => s.trim())
-      .filter(Boolean) ?? [...site.contactRecipients];
-  const from = process.env.CONTACT_FROM ?? "dom foley <df@domfoley.com>";
+  const parsedTo = process.env.CONTACT_TO?.split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const to = parsedTo?.length ? parsedTo : [...site.contactRecipients];
+  const from = process.env.CONTACT_FROM || "dom foley <df@domfoley.com>";
 
   try {
     const res = await fetch("https://api.resend.com/emails", {

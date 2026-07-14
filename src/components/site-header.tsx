@@ -1,15 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search } from "lucide-react";
+import { Search, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navItems } from "@/lib/site";
 import { BrandMark } from "@/components/brand-mark";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { CommandPalette } from "@/components/command-palette";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+
+//* Closed by default and never needed for first paint — keep it out of the
+//* initial client bundle instead of shipping cmdk/Dialog JS on every route.
+const CommandPalette = dynamic(
+  () => import("@/components/command-palette").then((m) => m.CommandPalette),
+  { ssr: false },
+);
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -63,16 +70,17 @@ export function SiteHeader() {
             <button
               type="button"
               onClick={() => setPaletteOpen(true)}
-              aria-label="Open command palette"
+              aria-label="Search or jump to a page"
               className="flex items-center gap-2 rounded-lg border border-border bg-card px-2.5 py-1.5 text-[12.5px] text-muted-foreground transition-colors duration-200 ease-out hover:border-accent-line hover:text-foreground"
             >
-              <Search size={15} strokeWidth={2} />
-              <span className="rounded-[5px] border border-border bg-background px-1.5 py-px font-mono text-[11px]">
+              <Menu size={15} strokeWidth={2} className="md:hidden" />
+              <Search size={15} strokeWidth={2} className="hidden md:block" />
+              <span className="hidden rounded-[5px] border border-border bg-background px-1.5 py-px font-mono text-[11px] md:inline">
                 ⌘K
               </span>
             </button>
           </TooltipTrigger>
-          <TooltipContent side="bottom">search the site</TooltipContent>
+          <TooltipContent side="bottom">search or jump to a page</TooltipContent>
         </Tooltip>
 
         <ThemeToggle />

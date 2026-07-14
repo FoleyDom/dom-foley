@@ -20,6 +20,12 @@ const serif = Instrument_Serif({
   style: ["normal", "italic"],
   variable: "--font-instrument-serif",
   display: "swap",
+  // Declared at the root layout (so every route ships the CSS variable),
+  // but only a few words on a couple of routes actually render in it —
+  // preloading it on every page (e.g. /about, which never uses it) wastes
+  // a request the browser then warns about. display:"swap" already covers
+  // the brief fallback-to-serif swap on the pages that do use it.
+  preload: false,
 });
 
 const mono = JetBrains_Mono({
@@ -146,14 +152,18 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-full flex flex-col overflow-x-hidden">
+      <body className="min-h-full flex flex-col overflow-x-hidden" suppressHydrationWarning>
         <TooltipProvider delayDuration={200}>
           <SiteHeader />
           <main className="flex-1 w-full">{children}</main>
           <SiteFooter />
         </TooltipProvider>
-        <SpeedInsights />
-        <Analytics />
+        {process.env.VERCEL ? (
+          <>
+            <SpeedInsights />
+            <Analytics />
+          </>
+        ) : null}
       </body>
     </html>
   );

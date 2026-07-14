@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { House, User, Mail, type LucideIcon } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { House, Briefcase, PenLine, User, Mail, type LucideIcon } from "lucide-react";
 import {
   CommandDialog,
   CommandEmpty,
@@ -9,10 +9,25 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandShortcut,
 } from "@/components/ui/command";
-import { site } from "@/lib/site";
+import { cn } from "@/lib/utils";
+import { navItems, site } from "@/lib/site";
 
 export type SearchItem = { label: string; href: string; hint?: string; keywords?: string[] };
+
+const PAGE_ICONS: Record<string, LucideIcon> = {
+  "/": House,
+  "/work": Briefcase,
+  "/writing": PenLine,
+  "/about": User,
+};
+
+const PAGE_KEYWORDS: Record<string, string[]> = {
+  "/work": ["projects"],
+  "/writing": ["blog", "posts"],
+  "/about": ["resume", "résumé"],
+};
 
 export function CommandPalette({
   open,
@@ -22,13 +37,24 @@ export function CommandPalette({
   onOpenChange: (open: boolean) => void;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
 
-  // work/ and writing/ are left out while those sections are still coming soon.
+  // Pulled from the same navItems the header nav renders, so the palette
+  // never drifts out of sync with what's actually in the header again.
   const pages: (SearchItem & { icon: LucideIcon })[] = [
-    { label: "home", href: "/", hint: "hero", icon: House },
-    { label: "about / résumé", href: "/about", hint: "experience", icon: User, keywords: ["resume"] },
+    ...navItems.map((item) => ({
+      label: item.label.replace(/\/$/, ""),
+      href: item.href,
+      hint: item.hint,
+      icon: PAGE_ICONS[item.href] ?? House,
+      keywords: PAGE_KEYWORDS[item.href],
+    })),
     { label: "contact", href: "/#contact", hint: site.email, icon: Mail, keywords: ["email"] },
   ];
+
+  function isCurrent(href: string) {
+    return href === "/" ? pathname === "/" : pathname.startsWith(href);
+  }
 
   function go(href: string) {
     onOpenChange(false);
@@ -36,6 +62,7 @@ export function CommandPalette({
   }
 
   function renderItem(item: SearchItem, Icon: LucideIcon) {
+    const current = isCurrent(item.href);
     return (
       <CommandItem
         key={item.href}
@@ -44,8 +71,12 @@ export function CommandPalette({
         className="gap-3 py-2.5"
       >
         <Icon size={16} strokeWidth={2} className="shrink-0 text-accent-ink" />
-        <span className="truncate font-medium">{item.label}</span>
-        {item.hint && <span className="ml-auto shrink-0 text-xs text-faint">{item.hint}</span>}
+        <span className={cn("truncate font-medium", current && "text-accent-ink")}>{item.label}</span>
+        {current ? (
+          <CommandShortcut className="tracking-normal text-accent-ink">current page</CommandShortcut>
+        ) : (
+          item.hint && <CommandShortcut className="tracking-normal text-faint">{item.hint}</CommandShortcut>
+        )}
       </CommandItem>
     );
   }

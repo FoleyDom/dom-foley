@@ -1,8 +1,8 @@
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { HeroTile } from "@/components/hero-tile";
 import { StackMarquee } from "@/components/stack-marquee";
 import { ContributionGraph } from "@/components/contribution-graph";
-import { ContactForm } from "@/components/contact-form";
 import { ComingSoonInline } from "@/components/coming-soon";
 import { ArrowLink } from "@/components/arrow-link";
 import { EmailLink } from "@/components/email-link";
@@ -10,11 +10,18 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 // import { testimonials } from "@/lib/about";
 import { site } from "@/lib/site";
 
+// Below the fold and stateful — split into its own chunk so its JS isn't
+// part of the critical bundle. Still SSR'd (ssr defaults to true), so the
+// markup renders in the initial HTML and nothing shifts on hydration.
+const ContactForm = dynamic(() =>
+  import("@/components/contact-form").then((m) => m.ContactForm),
+);
+
 export default function Home() {
   return (
     <div className="mx-auto max-w-266 px-8">
       {/* ── hero ── */}
-      <section className="grid grid-cols-1 items-stretch gap-8 py-14 md:grid-cols-[1fr_440px] md:gap-14 md:pt-14 md:pb-13">
+      <section className="grid grid-cols-1 items-stretch gap-8 py-14 md:grid-cols-[1fr_min(38vw,440px)] md:gap-14 md:pt-14 md:pb-13">
         <div className="flex max-w-180 flex-col gap-5.5">
           <div className="flex items-center gap-2 self-start rounded-full border border-border bg-card px-3 py-1.5 text-[13px] text-muted-foreground">
             <span

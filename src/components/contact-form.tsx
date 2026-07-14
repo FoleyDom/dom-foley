@@ -11,7 +11,10 @@ export function ContactForm() {
 
   if (state?.ok) {
     return (
-      <div className="flex flex-col justify-center gap-2 rounded-[9px] border border-accent-line bg-accent-soft px-5 py-8 text-center">
+      <div
+        role="status"
+        className="flex flex-col justify-center gap-2 rounded-[9px] border border-accent-line bg-accent-soft px-5 py-8 text-center"
+      >
         <span className="font-mono text-sm text-accent-ink">→ message sent</span>
         <p className="m-0 text-sm text-muted-foreground">
           Thanks for reaching out — I usually reply within a day.
@@ -23,12 +26,12 @@ export function ContactForm() {
   return (
     <form action={formAction} className="flex flex-col gap-3">
       <div className="grid grid-cols-2 gap-3">
-        <input name="name" placeholder="name" required className={inputClass} />
-        <input name="email" type="email" placeholder="email" required className={inputClass} />
+        <input name="name" type="text" autoComplete="name" placeholder="const name;" required className={inputClass} />
+        <input name="email" autoComplete="email" type="email" placeholder="const email;" required className={inputClass} />
       </div>
       <textarea
         name="message"
-        placeholder="what are you building?"
+        placeholder="let message = 'what're you working on?';"
         rows={4}
         required
         className={`${inputClass} resize-y`}

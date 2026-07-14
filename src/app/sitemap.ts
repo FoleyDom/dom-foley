@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/lib/site";
 
-// work/[slug] and writing/[slug] redirect to their index while those sections
-// are still "coming soon" — leave per-slug URLs out of the sitemap until then.
+//? work/[slug] and writing/[slug] redirect to their index while those sections
+//? are still "coming soon" — leave per-slug URLs out of the sitemap until then.
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 

@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-210 px-8">
-      <section className="grid grid-cols-1 items-start gap-11 pt-18 md:grid-cols-[1fr_220px]">
-        <div className="flex flex-col gap-4">
+      <section className="grid grid-cols-1 items-start gap-11 pt-18">
+        <div className="flex max-w-150 flex-col gap-4">
           <h1 className="m-0 text-[44px] font-semibold tracking-[-0.03em]">about</h1>
           {bio.map((para, i) => (
             <p
@@ -32,17 +32,10 @@ export default function AboutPage() {
             <span className="pointer-events-none absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/25 to-transparent transition-transform duration-500 ease-out group-hover:translate-x-full" />
           </a>
         </div>
-        {/* <div
-          className="hidden aspect-square place-items-center rounded-2xl border border-border md:grid"
-          style={{
-            background:
-              "repeating-linear-gradient(45deg,var(--accent-soft) 0 10px,transparent 10px 20px),var(--card)",
-          }}
-        >
-          <span className="rounded-md border border-border bg-card px-2.25 py-0.75 font-mono text-[11.5px] text-muted-foreground">
-            photo
-          </span>
-        </div> */}
+        {/* Re-add a photo here once there's a real one — swap the section
+            back to `md:grid-cols-[1fr_220px]` and drop this in as the second
+            column. Left single-column for now rather than reserving dead
+            space for a placeholder graphic. */}
       </section>
 
       <section className="pt-14">

@@ -114,11 +114,11 @@
   --line: rgba(235, 230, 255, 0.1);
   --border: var(--line);
   --input: var(--line);
-  --primary: #8f70ff;
+  --primary: #7b57ff; /* darkened from #8f70ff — white text on the original only cleared 3.54:1 (buttons need 4.5:1); this hits 4.52:1 at the same hue/saturation */
   --primary-foreground: #ffffff;
   --accent-ink: #a78bff;
-  --accent-soft: rgba(143, 112, 255, 0.13);
-  --accent-line: rgba(143, 112, 255, 0.35);
+  --accent-soft: rgba(123, 87, 255, 0.13);
+  --accent-line: rgba(123, 87, 255, 0.35);
   --code-bg: #12101a;
   --ring: var(--accent-line);
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px -12px rgba(0, 0, 0, 0.5);

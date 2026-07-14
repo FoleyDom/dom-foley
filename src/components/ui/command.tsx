@@ -54,6 +54,20 @@ function CommandDialog({
           className
         )}
         showCloseButton={showCloseButton}
+        onOpenAutoFocus={(e) => {
+          // On touch devices, autofocusing the input pops the virtual
+          // keyboard over the list before the user has seen it. Let them
+          // browse first and only bring up the keyboard if they tap in —
+          // but still move focus onto cmdk's root (tabIndex={-1}, so it's
+          // not itself a tab stop). Bailing out with only preventDefault()
+          // leaves focus wherever it was before open, so Tab from a
+          // paired keyboard walks out of the dialog into the aria-hidden
+          // background instead of staying inside the focus trap.
+          if (window.matchMedia("(pointer: coarse)").matches) {
+            e.preventDefault();
+            (e.currentTarget as HTMLElement).querySelector<HTMLElement>("[cmdk-root]")?.focus();
+          }
+        }}
       >
         <DialogHeader className="sr-only">
           <DialogTitle>{title}</DialogTitle>
