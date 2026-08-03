@@ -31,8 +31,15 @@ export function proxy(request: NextRequest) {
    }
 
    //? 2. Prevent direct access to API routes (if applicable)
-   //? Require an origin header for API requests to stop simple script-kiddie CURLs
-   if (request.nextUrl.pathname.startsWith('/api/') && !request.headers.get('origin')) {
+   //? Require an origin header for API requests to stop simple script-kiddie CURLs.
+   //? Exempt /api/autonoma: it's a server-to-server endpoint (the Autonoma test
+   //? runner, never a browser) and already authenticates every request via HMAC
+   //? signature — an Origin header wouldn't add anything there.
+   if (
+      request.nextUrl.pathname.startsWith('/api/') &&
+      !request.nextUrl.pathname.startsWith('/api/autonoma') &&
+      !request.headers.get('origin')
+   ) {
       return new NextResponse('Unauthorized', { status: 401 })
    }
 
