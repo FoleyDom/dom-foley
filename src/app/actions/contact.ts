@@ -20,24 +20,13 @@ const redis =
     })
     : null;
 
-const RATE_LIMIT_PREFIX = "contact-form";
-
 const ratelimit = redis
   ? new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(3, "10 m"),
-    prefix: RATE_LIMIT_PREFIX,
+    prefix: "contact-form",
   })
   : null;
-
-//? Used only by the Autonoma test-data factory's teardown, to remove the sliding-
-//? window buckets an `overrideIp` submission created. Real visitor IPs are never
-//? passed here — their rate-limit history is left alone.
-export async function clearRateLimit(ip: string) {
-  if (!redis) return;
-  const keys = await redis.keys(`${RATE_LIMIT_PREFIX}:${ip}:*`);
-  if (keys.length) await redis.del(...keys);
-}
 
 /**
  * Contact form handler. Delivers via the Resend HTTP API (no SDK dependency).
@@ -50,11 +39,6 @@ export async function clearRateLimit(ip: string) {
 export async function submitContact(
   _prev: ContactState,
   formData: FormData,
-  //? Rate-limit identifier override — used only by the Autonoma test-data factory
-  //? (src/app/api/autonoma/factories.ts) so concurrent test runs don't share a
-  //? rate-limit bucket with each other or with real visitors. Real submissions
-  //? never pass this; they fall through to the header-derived IP below.
-  overrideIp?: string,
 ): Promise<ContactState> {
   const name = String(formData.get("name") ?? "")
     .trim()
@@ -74,14 +58,13 @@ export async function submitContact(
   if (message.length > 5000) return { ok: false, error: "That message is a little too long." };
 
   if (ratelimit) {
+    const hdrs = await headers();
     //? Trustworthy as-is on Vercel, which overwrites client-supplied
     //? X-Forwarded-For rather than forwarding it — see Vercel's request-header
     //? docs. Re-check this ordering if this ever moves off Vercel.
-    const hdrs = overrideIp ? null : await headers();
     const ip =
-      overrideIp ||
-      hdrs?.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-      hdrs?.get("cf-connecting-ip") ||
+      hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      hdrs.get("cf-connecting-ip") ||
       "unknown";
     try {
       const { success } = await ratelimit.limit(ip);
