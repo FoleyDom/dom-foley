@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 const BLOCKED_USER_AGENTS = [
    'l9scan',
    'LeakIX',
-   'Go-http-client',
    'HUNT-Bot',
 ]
 
