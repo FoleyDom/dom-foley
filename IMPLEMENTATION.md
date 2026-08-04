@@ -74,8 +74,15 @@ concepts; this session renamed the factory exports to match, since the SDK route
       succeeded while overlapping (`b` brought up before `a` was torn down);
       distinct Upstash keys existed simultaneously; tearing down `a` left `b`'s key
       untouched; tearing down `b` left nothing behind.
-- [x] Committed, pushed to `origin/autonoma-integration` — PR #7 (already open)
-      picks up the commit.
+- [x] Committed (unsigned — see note below), pushed to `origin/autonoma-integration`
+      — PR #7 (already open) picks up the commit.
+
+**Signing note**: this repo has `commit.gpgsign=true` (SSH format), but the key
+wasn't loaded in `ssh-agent` (`ssh-add -l` → "The agent has no identities"), so a
+signed commit blocks indefinitely on a passphrase prompt with no way to supply one
+non-interactively. Asked the developer how to proceed (same blocker a prior session
+hit and resolved the same way); they chose `--no-gpg-sign` for this commit rather
+than have it bypassed silently. Re-sign or amend later if you'd like it signed.
 
 ## Validation notes
 
