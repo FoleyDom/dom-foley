@@ -10,9 +10,9 @@ against `AUTONOMA_SHARED_SECRET`; there's no other auth in front of it.
 
 If you add or change a model, or the code that creates one, update the matching
 factory in `factories.ts`. Four of the five factories (`Project`, `Post`,
-`Experience`, `Skill`) resolve against the static arrays in `src/lib/*.ts` rather
+`Job`, `SkillGroup`) resolve against the static arrays in `src/lib/*.ts` rather
 than creating anything — there's no database, so if you add a new static entry
-worth seeding for a scenario, add it there too. `ContactSubmission` is the one
+worth seeding for a scenario, add it there too. `ContactMessage` is the one
 factory with a real side effect (it calls `submitContact`); if that action's
 signature or behavior changes, keep the factory in sync. See `IMPLEMENTATION.md`
 for the full reasoning behind these choices.

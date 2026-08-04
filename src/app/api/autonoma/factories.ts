@@ -9,7 +9,7 @@ import { submitContact, clearRateLimit } from "@/app/actions/contact";
 //? tenant/organization concept, so every factory's input schema carries it.
 const scoped = { testRunId: z.string() };
 
-//? Project/Post/Experience/Skill are `const` arrays compiled into the bundle
+//? Project/Post/Job/SkillGroup are `const` arrays compiled into the bundle
 //? (src/lib/projects.ts, posts.ts, about.ts) — there is no runtime creation path,
 //? so these factories resolve the recipe's key field against the real, permanent
 //? content instead of fabricating new rows. Teardown is a no-op: nothing was
@@ -45,13 +45,13 @@ export const Post = defineFactory({
   teardown: () => {},
 });
 
-export const Experience = defineFactory({
+export const Job = defineFactory({
   inputSchema: z.object({ ...scoped, co: z.string() }),
   create: async (data) => {
     const job = jobs.find((j) => j.co === data.co);
     if (!job) {
       throw new Error(
-        `No such experience "${data.co}" — Experience has no runtime creation path, ` +
+        `No such job "${data.co}" — Job has no runtime creation path, ` +
         `so the recipe must reference one of: ${jobs.map((j) => j.co).join(", ")}`,
       );
     }
@@ -60,13 +60,13 @@ export const Experience = defineFactory({
   teardown: () => {},
 });
 
-export const Skill = defineFactory({
+export const SkillGroup = defineFactory({
   inputSchema: z.object({ ...scoped, label: z.string() }),
   create: async (data) => {
     const group = skillGroups.find((g) => g.label === data.label);
     if (!group) {
       throw new Error(
-        `No such skill group "${data.label}" — Skill has no runtime creation path, ` +
+        `No such skill group "${data.label}" — SkillGroup has no runtime creation path, ` +
         `so the recipe must reference one of: ${skillGroups.map((g) => g.label).join(", ")}`,
       );
     }
@@ -75,14 +75,14 @@ export const Skill = defineFactory({
   teardown: () => {},
 });
 
-//? ContactSubmission is the one entity with a real creation path: it goes through
+//? ContactMessage is the one entity with a real creation path: it goes through
 //? the same submitContact() the live form calls, so validation, the honeypot check,
 //? Upstash rate limiting, and the real Resend send all run for real. There is no
 //? row to read back afterward (the app persists nothing) — the observable effect is
 //? the email itself. Each test run gets its own synthetic rate-limit identifier
 //? (autonoma-<testRunId>) so concurrent runs never contend for the same bucket, and
 //? teardown clears that identifier's buckets rather than any real visitor's.
-export const ContactSubmission = defineFactory({
+export const ContactMessage = defineFactory({
   inputSchema: z.object({
     ...scoped,
     name: z.string(),
@@ -118,7 +118,7 @@ export const ContactSubmission = defineFactory({
 export const factories = {
   Project,
   Post,
-  Experience,
-  Skill,
-  ContactSubmission,
+  Job,
+  SkillGroup,
+  ContactMessage,
 };
