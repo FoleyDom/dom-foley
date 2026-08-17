@@ -4,11 +4,12 @@ import { StackMarquee } from "@/components/stack-marquee";
 import { ContributionGraph } from "@/components/contribution-graph";
 import { ContactForm } from "@/components/contact-form";
 import { featuredProjects } from "@/lib/projects";
-import { latestPosts } from "@/lib/posts";
+import { getLatestPosts } from "@/lib/posts";
 // import { testimonials } from "@/lib/about";
 import { site } from "@/lib/site";
 
-export default function Home() {
+export default async function Home() {
+  const latestPosts = await getLatestPosts(3);
   return (
     <div className="mx-auto max-w-266 px-8">
       {/* ── hero ── */}
