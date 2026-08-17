@@ -1,0 +1,75 @@
+name: Promote to Production
+
+# Stage 2 of 2: staging -> prod (manual).
+# This never runs on push. Someone has to open the Actions tab and click
+# "Run workflow" — that button click is the deploy gate. It re-scans staging,
+# then opens a PR into prod and stops. Nothing here auto-merges; a human has
+# to review the diff and click Merge for prod to actually change.
+
+on:
+   workflow_dispatch:
+      inputs:
+         confirm:
+            description: 'Type "promote" to confirm you want to open a staging -> prod PR'
+            required: true
+
+permissions:
+   contents: write
+   pull-requests: write
+
+jobs:
+   check-confirmation:
+      name: Verify Manual Confirmation
+      runs-on: ubuntu-latest
+      steps:
+         - name: Require explicit confirmation
+           if: ${{ github.event.inputs.confirm != 'promote' }}
+           run: |
+              echo "::error::Promotion aborted — the 'confirm' input must be exactly the word promote."
+              exit 1
+
+   security-scan:
+      name: Secret & SAST Scanning (staging)
+      needs: check-confirmation
+      runs-on: ubuntu-latest
+      steps:
+         - name: Checkout staging
+           uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+           with:
+              ref: staging
+              fetch-depth: 0 # Required for deep secret scanning
+
+         - name: Run Gitleaks (Secret Scanning)
+           uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2
+           env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+         - name: Run Semgrep (Code Vulnerabilities)
+           uses: returntocorp/semgrep-action@713efdd345f3035192eaa63f56867b88e63e4e5d # v1
+           with:
+              config: "p/javascript"
+
+   open-promotion-pr:
+      name: Open staging -> prod PR
+      needs: security-scan
+      runs-on: ubuntu-latest
+      steps:
+         - name: Checkout staging
+           uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+           with:
+              ref: staging
+
+         - name: Create Pull Request to Production
+           uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
+           with:
+              token: ${{ secrets.GITHUB_TOKEN }}
+              branch: promote-staging-to-prod
+              base: prod
+              title: "Promote: staging into prod -  (${{ github.sha }})"
+              body: |
+                 Manually triggered by @${{ github.actor }} via workflow_dispatch.
+                 Gitleaks + Semgrep passed against `staging`.
+
+                 **This PR does not auto-merge.** Review the diff and click Merge
+                 yourself when you're ready for it to go live.
+              delete-branch: true

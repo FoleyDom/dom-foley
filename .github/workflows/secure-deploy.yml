@@ -1,5 +1,10 @@
 name: Security Scan & Auto-Deploy
 
+# Stage 1 of 2: main -> staging (automatic).
+# push to main runs security scans, then opens + auto-merges a PR into staging.
+# Stage 2 (staging -> prod) is manual and lives in promote-to-prod.yml —
+# it is never triggered from here.
+
 on:
    workflow_dispatch:
    push:
