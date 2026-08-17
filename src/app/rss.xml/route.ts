@@ -1,18 +1,44 @@
+import { getAllPosts } from "@/lib/posts";
 import { site } from "@/lib/site";
 
-// Posts are still in drafts (see /writing) — the feed ships with no items
-// until there's real content to link to.
+function escapeXml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
 export async function GET() {
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>dom foley — writing</title>
-    <link>${site.url}/writing</link>
-    <description>Essays on full-stack engineering, DevOps, and shipping software.</description>
-    <language>en</language>
-    <atom:link href="${site.url}/rss.xml" rel="self" type="application/rss+xml" />
-  </channel>
-</rss>`;
+  const posts = await getAllPosts();
+
+  const items = posts
+    .map((post) => {
+      const link = post.canonicalUrl ?? `${site.url}/writing/${post.slug}`;
+      return `    <item>
+      <title>${escapeXml(post.title)}</title>
+      <link>${link}</link>
+      <guid isPermaLink="true">${link}</guid>
+      <description>${escapeXml(post.summary)}</description>
+      <pubDate>${new Date(post.dateISO).toUTCString()}</pubDate>
+    </item>`;
+    })
+    .join("\n");
+
+  const xml = `
+    <?xml version="1.0" encoding="UTF-8"?>
+      <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+        <channel>
+          <title>dom foley — writing</title>
+          <link>${site.url}/writing</link>
+          <description>Essays on full-stack engineering, DevOps, and shipping software.</description>
+          <language>en</language>
+          <atom:link href="${site.url}/rss.xml" rel="self" type="application/rss+xml" />
+      ${items}
+        </channel>
+      </rss>
+  `;
 
   return new Response(xml, {
     headers: {
