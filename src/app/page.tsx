@@ -11,9 +11,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { getLatestPosts } from "@/lib/posts";
 import { site } from "@/lib/site";
 
-// Below the fold and stateful — split into its own chunk so its JS isn't
-// part of the critical bundle. Still SSR'd (ssr defaults to true), so the
-// markup renders in the initial HTML and nothing shifts on hydration.
+//* Below the fold and stateful — split into its own chunk so its JS isn't part of the critical bundle. Still SSR'd (ssr defaults to true), so the markup renders in the initial HTML and nothing shifts on hydration.
 const ContactForm = dynamic(() =>
   import("@/components/contact-form").then((m) => m.ContactForm),
 );
@@ -146,7 +144,7 @@ export default async function Home() {
       <section className="pt-18">
         <div className="mb-5 flex items-baseline gap-4">
           <h2 className="m-0 text-[28px] font-semibold tracking-[-0.02em]">recent writing</h2>
-          <ArrowLink href="/writing" className="ml-auto">
+          <ArrowLink href="/writings" className="ml-auto">
             all posts
           </ArrowLink>
         </div>
@@ -155,7 +153,7 @@ export default async function Home() {
             {latestPosts.map((post) => (
               <Link
                 key={post.slug}
-                href={`/writing/${post.slug}`}
+                href={`/writings/${post.slug}`}
                 className="grid grid-cols-[1fr_auto] items-baseline gap-x-5 gap-y-1 border-t border-border px-1 py-4.5 no-underline transition-colors hover:bg-accent-soft sm:grid-cols-[110px_1fr_auto]"
               >
                 <span className="order-2 font-mono text-[12.5px] text-faint sm:order-1">
@@ -173,7 +171,7 @@ export default async function Home() {
             label="writing"
             command="cat ./posts/*.md"
             message="drafts are still drafts — nothing published yet."
-            href="/writing"
+            href="/writings"
             cta="see what's brewing"
           />
         )}

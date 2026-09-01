@@ -3,7 +3,7 @@ import { cache } from "react";
 
 const NUM_POSTS_TO_SHOW: number = 5;
 
-export type PostTag = "devops" | "frontend" | "career";
+export type PostTag = "devops" | "backend" | "frontend" | "career";
 
 export type Post = {
   slug: string;
@@ -25,13 +25,13 @@ export type Post = {
   canonicalUrl?: string;
 };
 
-export const postTags: ("all" | PostTag)[] = ["all", "devops", "frontend", "career"];
+export const postTags: ("all" | PostTag)[] = ["all", "devops", "backend", "frontend", "career"];
 
 //* synapse config — set these in .env.local to point to your own repo/branch/token if you want to test locally with a different source of truth.
 const SYNAPSE_REPO: string = process.env.SYNAPSE_GITHUB_REPO ?? "FoleyDom/synapse";
 const SYNAPSE_BRANCH: string = process.env.SYNAPSE_GITHUB_BRANCH ?? "main";
 const SYNAPSE_TOKEN: string | undefined = process.env.SYNAPSE_GITHUB_TOKEN;
-const WRITINGS_DIR: string = "drafts";
+const WRITINGS_DIR: string = process.env.SYNAPSE_WRITINGS_DIR ?? "writings";
 
 type GithubContentEntry = {
   name: string;
@@ -152,7 +152,7 @@ function parsePost(fileName: string, raw: string): Post | null {
   if (!dateISO) return fail(`"date" must be a YYYY-MM-DD date (got ${JSON.stringify(data.date)})`);
 
   if (!CATEGORY_VALUES[data.category]) {
-    fail(
+    return fail(
       `"category" must be one of ${Object.keys(CATEGORY_VALUES).join(", ")} (got ${JSON.stringify(data.category)}) — ` +
       `this is separate from "tags", which is freeform and only used for cross-posting`,
     );

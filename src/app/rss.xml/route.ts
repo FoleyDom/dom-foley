@@ -15,7 +15,7 @@ export async function GET() {
 
   const items = posts
     .map((post) => {
-      const link = post.canonicalUrl ?? `${site.url}/writing/${post.slug}`;
+      const link = post.canonicalUrl ?? `${site.url}/writings/${post.slug}`;
       return `    <item>
       <title>${escapeXml(post.title)}</title>
       <link>${link}</link>
@@ -31,7 +31,7 @@ export async function GET() {
       <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
         <channel>
           <title>dom foley — writing</title>
-          <link>${site.url}/writing</link>
+          <link>${site.url}/writings</link>
           <description>Essays on full-stack engineering, DevOps, and shipping software.</description>
           <language>en</language>
           <atom:link href="${site.url}/rss.xml" rel="self" type="application/rss+xml" />

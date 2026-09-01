@@ -25,7 +25,7 @@ export type NavItem = { label: string; href: string; hint: string };
 export const navItems: NavItem[] = [
   { label: "home/", href: "/", hint: "home & contact" },
   { label: "work/", href: "/work", hint: "projects — coming soon" },
-  { label: "writing/", href: "/writing", hint: "notes on shipping software" },
+  { label: "writings/", href: "/writings", hint: "notes on shipping software" },
   { label: "about/", href: "/about", hint: "experience & résumé" },
 ];
 
