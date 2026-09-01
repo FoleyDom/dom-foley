@@ -43,7 +43,7 @@ export function WritingList({ posts }: { posts: PostSummary[] }) {
         {visible.map((post) => (
           <Link
             key={post.slug}
-            href={`/writing/${post.slug}`}
+            href={`/writings/${post.slug}`}
             className="flex flex-col gap-2 border-t border-border px-1 py-6.5 no-underline transition-colors hover:bg-accent-soft"
           >
             <div className="flex items-baseline gap-3 font-mono text-[12.5px] text-faint">

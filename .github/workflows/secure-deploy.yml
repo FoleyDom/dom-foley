@@ -1,5 +1,10 @@
 name: Security Scan & Auto-Deploy
 
+# Stage 1 of 2: main -> staging (automatic).
+# push to main runs security scans, then opens + auto-merges a PR into staging.
+# Stage 2 (staging -> prod) is manual and lives in promote-to-prod.yml —
+# it is never triggered from here.
+
 on:
    workflow_dispatch:
    push:
@@ -16,12 +21,12 @@ jobs:
       runs-on: ubuntu-latest
       steps:
          - name: Checkout Code
-           uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+           uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
            with:
               fetch-depth: 0 # Required for deep secret scanning
 
          - name: Run Gitleaks (Secret Scanning)
-           uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2
+           uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
            env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -36,11 +41,11 @@ jobs:
       runs-on: ubuntu-latest
       steps:
          - name: Checkout Code
-           uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+           uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
 
          - name: Create Pull Request to Staging
            id: cpr-staging
-           uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
+           uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
            with:
               token: ${{ secrets.GITHUB_TOKEN }}
               branch: auto-deploy-main
