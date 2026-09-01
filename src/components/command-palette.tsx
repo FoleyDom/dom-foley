@@ -19,7 +19,7 @@ export type SearchItem = { label: string; href: string; hint?: string; keywords?
 const PAGE_ICONS: Record<string, LucideIcon> = {
   "/": House,
   "/work": Briefcase,
-  "/writings": PenLine,
+  "/writing": PenLine,
   "/about": User,
 };
 
