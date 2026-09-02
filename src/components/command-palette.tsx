@@ -25,7 +25,7 @@ const PAGE_ICONS: Record<string, LucideIcon> = {
 
 const PAGE_KEYWORDS: Record<string, string[]> = {
   "/work": ["projects", "build in public", "learning", "open source"],
-  "/writings": ["blog", "posts", "writing"],
+  "/writing": ["blog", "posts", "writing"],
   "/about": ["resume", "résumé"],
 };
 
