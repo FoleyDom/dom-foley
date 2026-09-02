@@ -37,7 +37,7 @@ const nextConfig: NextConfig = {
             key: "Permissions-Policy",
             value: "geolocation=(), microphone=(), camera=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=(), xr-spatial-tracking=()",
           },
-          // Prevent cross-domain policy exploitation
+          //! Prevent cross-domain policy exploitation
           {
             key: "X-Permitted-Cross-Domain-Policies",
             value: "none",
@@ -53,8 +53,9 @@ const nextConfig: NextConfig = {
             // on the stricter policy without it.
             value: `default-src 'self'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self' https://vercel.live wss://ws-us3.pusher.com; script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""} https://vercel.live https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://vercel.live; frame-src https://vercel.live; frame-ancestors 'none'; base-uri 'self'; form-action 'self'`,
           },
-          // Disable client-side caching for sensitive pages (optional, apply selectively)
-          // Uncomment for sensitive routes: { key: "Cache-Control", value: "no-store, no-cache, must-revalidate, proxy-revalidate" }
+          //! Disable client-side caching for sensitive pages (optional, apply selectively)
+          //* Uncomment for sensitive routes: 
+          //? { key: "Cache-Control", value: "no-store, no-cache, must-revalidate, proxy-revalidate" }
         ],
       },
       //* Stricter policy for API routes

@@ -1,20 +1,8 @@
-import type { Metadata } from "next";
-import { ComingSoon } from "@/components/coming-soon";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "writing",
-  description:
-    "Notes on shipping software: infrastructure, frontend performance, and the boring glue in between.",
-  alternates: { canonical: "/writing" },
-  robots: { index: false, follow: true },
-};
-
-export default function WritingPage() {
-  return (
-    <ComingSoon
-      label="writing"
-      command="cat ./posts/*.md"
-      message="drafts are still drafts — nothing published yet."
-    />
-  );
+//? /writing (singular) is a legacy path — the real route is /writings
+//? (plural), matching the canonical_url convention used across every
+//? synapse post. Redirect rather than 404 in case anything already links here.
+export default function LegacyWritingIndex() {
+  redirect("/writings");
 }

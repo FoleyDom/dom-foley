@@ -25,7 +25,7 @@ export type NavItem = { label: string; href: string; hint: string };
 export const navItems: NavItem[] = [
   { label: "home/", href: "/", hint: "home & contact" },
   { label: "work/", href: "/work", hint: "projects — coming soon" },
-  { label: "writing/", href: "/writing", hint: "blog — coming soon" },
+  { label: "writing/", href: "/writing", hint: "notes on shipping software" },
   { label: "about/", href: "/about", hint: "experience & résumé" },
 ];
 
@@ -44,12 +44,16 @@ export const coreStack = [
   "AWS",
 ] as const;
 
+function leapYear(year = new Date().getFullYear()): boolean {
+  return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+}
+
 /**
  * Deterministic contribution grid (52 weeks × 7 days). Mirrors the mockup's
  * sine-hash so the layout is stable between renders. Returns intensity levels
  * 0–4; the component maps them to theme-aware colors.
  */
-export function contributionCells(count = 364): number[] {
+export function contributionCells(count: number = leapYear() ? 365 : 364): number[] {
   const cells: number[] = [];
   for (let i = 0; i < count; i++) {
     const r = Math.abs(Math.sin(i * 12.9898) * 43758.5453) % 1;
