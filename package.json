@@ -7,8 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "pnpm eslint",
-    "typecheck": "pnpm tsc --noEmit"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@upstash/ratelimit": "^2.0.8",
