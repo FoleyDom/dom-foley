@@ -3,7 +3,7 @@ import { cache } from "react";
 
 const NUM_POSTS_TO_SHOW: number = 5;
 
-export type PostTag = "devops" | "backend" | "frontend" | "career";
+export type PostTag = "devops" | "backend" | "frontend" | "career" | "security";
 
 export type Post = {
   slug: string;
@@ -25,7 +25,7 @@ export type Post = {
   canonicalUrl?: string;
 };
 
-export const postTags: ("all" | PostTag)[] = ["all", "devops", "backend", "frontend", "career"];
+export const postTags: ("all" | PostTag)[] = ["all", "devops", "backend", "frontend", "career", "security"];
 
 //* synapse config — set these in .env.local to point to your own repo/branch/token if you want to test locally with a different source of truth.
 const SYNAPSE_REPO: string = process.env.SYNAPSE_GITHUB_REPO ?? "FoleyDom/synapse";
@@ -134,7 +134,14 @@ function buildCategorysValues(): Record<string, PostTag> {
 const CATEGORY_VALUES: Record<string, PostTag> = buildCategorysValues();
 
 function parsePost(fileName: string, raw: string): Post | null {
-  const { data, content } = matter(raw);
+  const { data: rawData, content } = matter(raw);
+
+  //* Normalize frontmatter keys to lower case so "Title:" & "title:" both work
+  const data: typeof rawData = {};
+  for (const [key, value] of Object.entries(rawData)) {
+    data[key.toLowerCase()] = value;
+  }
+
   const fail = (reason: string, consoleLogFails: boolean = process.env.NODE_ENV === "development") => {
     if (consoleLogFails) {
       console.warn(`[posts] skipping "${fileName}": ${reason}`);
