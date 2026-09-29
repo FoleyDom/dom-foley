@@ -20,11 +20,6 @@ const serif = Instrument_Serif({
   style: ["normal", "italic"],
   variable: "--font-instrument-serif",
   display: "swap",
-  // Declared at the root layout (so every route ships the CSS variable),
-  // but only a few words on a couple of routes actually render in it —
-  // preloading it on every page (e.g. /about, which never uses it) wastes
-  // a request the browser then warns about. display:"swap" already covers
-  // the brief fallback-to-serif swap on the pages that do use it.
   preload: false,
 });
 
@@ -102,10 +97,6 @@ export const viewport: Viewport = {
   ],
 };
 
-// Sets the theme class before first paint to avoid a flash of the wrong theme.
-// No stored preference → follow the OS ("system" is the default). Must run
-// render-blocking and inline (next/script's beforeInteractive is NOT early
-// enough — it runs via a client-injected tag, after first paint).
 const themeScript = `(function(){try{var t=localStorage.getItem('df-theme');var d=t==='dark'||t==='light'?t==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.classList.toggle('dark',d);}catch(e){}})();`;
 
 export default function RootLayout({
@@ -113,7 +104,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Structured data helps search engines render a rich Person/site result.
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [

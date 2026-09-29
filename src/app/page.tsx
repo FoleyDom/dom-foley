@@ -17,7 +17,7 @@ const ContactForm = dynamic(() =>
 );
 
 export default async function Home() {
-  const latestPosts = await getLatestPosts(3);
+  const latestPosts = await getLatestPosts(5);
 
   return (
     <div className="mx-auto max-w-266 px-8">
@@ -131,6 +131,7 @@ export default async function Home() {
             all work
           </ArrowLink>
         </div>
+        
         <ComingSoonInline
           label="work"
           command="ls ./projects"
@@ -176,32 +177,6 @@ export default async function Home() {
           />
         )}
       </section>
-
-      {/* ── testimonials ── */}
-      {/* <section className="pt-18">
-        <h2 className="m-0 mb-6 text-[28px] font-semibold tracking-[-0.02em]">kind words</h2>
-        <div className="grid gap-5 md:grid-cols-2">
-          {testimonials.map((q) => (
-            <figure
-              key={q.name}
-              className="m-0 flex flex-col gap-4 rounded-[14px] border border-border bg-card px-6.5 py-6"
-            >
-              <blockquote className="m-0 font-serif text-[19px] italic leading-normal text-pretty">
-                “{q.quote}”
-              </blockquote>
-              <figcaption className="flex items-center gap-3">
-                <span className="grid h-9 w-9 place-items-center rounded-full bg-accent-soft text-[13px] font-semibold text-accent-ink">
-                  {q.initials}
-                </span>
-                <span className="flex flex-col">
-                  <span className="text-sm font-semibold">{q.name}</span>
-                  <span className="text-[12.5px] text-muted-foreground">{q.role}</span>
-                </span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </section> */}
 
       {/* ── contact ── */}
       <section id="contact" className="scroll-mt-20 pt-18 pb-22">
