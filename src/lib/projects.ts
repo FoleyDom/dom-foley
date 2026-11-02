@@ -73,7 +73,7 @@ export const projects: Project[] = [
     tags: ["Laravel", "Inertia", "React", "TypeScript", "Tailwind CSS", "Laravel Cloud"],
     featured: true,
     summary:
-      "EasyScores is a mobile-first sports tracker for the NBA, NFL and MLB. It leads with what fans actually check: live scores, linescores, leaders and box scores, standings, and a home screen built around your favourite teams. Heads-Ups surface finals and close games late for the teams you follow, and a bet tracker sits quietly under Extras.",
+      "EasyScores is a mobile-first sports tracker for the NBA, NFL and MLB. It leads with what fans actually check: live scores, linescores, leaders and box scores, standings, and a home screen built around your favorite teams. Heads-Ups surface finals and close games late for the teams you follow, and a bet tracker sits quietly under Extras.",
     tech: ["Laravel", "Inertia.js", "React", "TypeScript", "Tailwind CSS", "Fortify", "PHPStan", "Laravel Cloud"],
     meta: "★ · live on Laravel Cloud",
     sections: [
@@ -83,7 +83,7 @@ export const projects: Project[] = [
       },
       {
         heading: "what i built",
-        body: "A Laravel + Inertia/React app backed by ESPN's public API behind a provider-agnostic SportsProvider interface. A shared cache layer sets lifetimes from the games themselves: live games refresh on a short interval, upcoming games refresh every half hour or so until tip-off to keep odds current, finished data is held for a week. Concurrent requests share one provider call, and the last good response is served if the provider fails. On top of that: favourite teams, team season pages, game detail pages, Heads-Ups, watched games, and a bet tracker, with a bottom tab bar on phones and a sidebar on desktop.",
+        body: "A Laravel + Inertia/React app backed by ESPN's public API behind a provider-agnostic SportsProvider interface. A shared cache layer sets lifetimes from the games themselves: live games refresh on a short interval, upcoming games refresh every half hour or so until tip-off to keep odds current, finished data is held for a week. Concurrent requests share one provider call, and the last good response is served if the provider fails. On top of that: favorite teams, team season pages, game detail pages, Heads-Ups, watched games, and a bet tracker, with a bottom tab bar on phones and a sidebar on desktop.",
       },
     ],
     code: {
