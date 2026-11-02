@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 
 //? /writing/[slug] (singular) is a legacy path — see /writing/page.tsx.
 export default async function LegacyWritingPost({
@@ -7,5 +7,5 @@ export default async function LegacyWritingPost({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  redirect(`/writings/${slug}`);
+  permanentRedirect(`/writings/${slug}`);
 }

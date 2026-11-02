@@ -19,7 +19,7 @@ export function CodeBlock({ code }: { lang?: string; code: string }) {
     >
       <code>
         {lines.map((line, i) => (
-          <span key={i} style={isComment(line) ? { color: "#615a78" } : undefined}>
+          <span key={i} style={isComment(line) ? { color: "#8a83a3" } : undefined}>
             {line || " "}
             {i < lines.length - 1 ? "\n" : ""}
           </span>

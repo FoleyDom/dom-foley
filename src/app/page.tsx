@@ -9,6 +9,8 @@ import { EmailLink } from "@/components/email-link";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 // import { testimonials } from "@/lib/about";
 import { getLatestPosts } from "@/lib/posts";
+import { featuredProjects } from "@/lib/projects";
+import { ProjectCard } from "@/components/project-card";
 import { site } from "@/lib/site";
 
 //* Below the fold and stateful — split into its own chunk so its JS isn't part of the critical bundle. Still SSR'd (ssr defaults to true), so the markup renders in the initial HTML and nothing shifts on hydration.
@@ -131,14 +133,21 @@ export default async function Home() {
             all work
           </ArrowLink>
         </div>
-        
-        <ComingSoonInline
-          label="work"
-          command="ls ./projects"
-          message="write-ups are mid-polish — nothing to list yet."
-          href="/work"
-          cta="peek at the queue"
-        />
+        {featuredProjects.length > 0 ? (
+          <div className="grid gap-5 md:grid-cols-2">
+            {featuredProjects.map((p) => (
+              <ProjectCard key={p.slug} project={p} />
+            ))}
+          </div>
+        ) : (
+          <ComingSoonInline
+            label="work"
+            command="ls ./projects"
+            message="write-ups are mid-polish — nothing to list yet."
+            href="/work"
+            cta="peek at the queue"
+          />
+        )}
       </section>
 
       {/* ── recent writing ── */}

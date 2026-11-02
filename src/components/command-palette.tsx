@@ -19,13 +19,13 @@ export type SearchItem = { label: string; href: string; hint?: string; keywords?
 const PAGE_ICONS: Record<string, LucideIcon> = {
   "/": House,
   "/work": Briefcase,
-  "/writing": PenLine,
+  "/writings": PenLine,
   "/about": User,
 };
 
 const PAGE_KEYWORDS: Record<string, string[]> = {
   "/work": ["projects", "build in public", "learning", "open source"],
-  "/writing": ["blog", "posts", "writing"],
+  "/writings": ["blog", "posts", "writing"],
   "/about": ["resume", "résumé"],
 };
 

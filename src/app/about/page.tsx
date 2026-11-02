@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { bio, jobs, skillGroups } from "@/lib/about";
 import { site } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "about",
   description:
     "Dom Foley — a full-stack engineer with a platform habit. Experience, skills, and résumé.",
-  alternates: { canonical: "/about" },
-};
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (
