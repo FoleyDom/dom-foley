@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PostBody } from "@/components/post-body";
 import { getAllPosts, getPost } from "@/lib/posts";
-import { site } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
@@ -19,18 +19,13 @@ export async function generateMetadata({
   const post = await getPost(slug);
   if (!post) return {};
 
-  return {
+  return pageMetadata({
     title: post.title,
     description: post.summary,
-    alternates: { canonical: post.canonicalUrl ?? `${site.url}/writings/${post.slug}` },
-    openGraph: {
-      type: "article",
-      title: post.title,
-      description: post.summary,
-      publishedTime: post.dateISO,
-      url: post.canonicalUrl ?? `${site.url}/writings/${post.slug}`,
-    },
-  };
+    path: post.canonicalUrl ?? `/writings/${post.slug}`,
+    type: "article",
+    publishedTime: post.dateISO,
+  });
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {

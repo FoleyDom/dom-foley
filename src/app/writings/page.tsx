@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { WritingList } from "@/components/writing-list";
 import { getAllPosts } from "@/lib/posts";
 import { ComingSoon } from "@/components/coming-soon";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "writing",
   description:
     "Notes on shipping software: infrastructure, frontend performance, and the boring glue in between.",
-  alternates: { canonical: "/writings" },
-};
+  path: "/writings",
+});
 
 export default async function WritingPage() {
   const posts = await getAllPosts();

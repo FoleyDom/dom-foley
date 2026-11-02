@@ -24,8 +24,8 @@ export type NavItem = { label: string; href: string; hint: string };
 //* Header navigation — the trailing slash matches the terminal-prompt brand.
 export const navItems: NavItem[] = [
   { label: "home/", href: "/", hint: "home & contact" },
-  { label: "work/", href: "/work", hint: "projects — coming soon" },
-  { label: "writing/", href: "/writing", hint: "notes on shipping software" },
+  { label: "work/", href: "/work", hint: "projects & case studies" },
+  { label: "writing/", href: "/writings", hint: "notes on shipping software" },
   { label: "about/", href: "/about", hint: "experience & résumé" },
 ];
 
