@@ -174,6 +174,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                 <DemoVideo video={demo} />
                 <script
                   type="application/ld+json"
+                  // Safe: JSON-LD built from our own static project data, with "<" escaped so it can't close the tag.
+                  // nosemgrep: typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml
                   dangerouslySetInnerHTML={{ __html: JSON.stringify(videoJsonLd).replace(/</g, "\\u003c") }}
                 />
               </>
